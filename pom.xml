@@ -4,7 +4,7 @@
   <artifactId>detectlanguage</artifactId>
   <packaging>jar</packaging>
   <name>detectlanguage-java</name>
-  <version>1.0.0</version>
+  <version>1.0.0-SNAPSHOT</version>
   <description>Language Detection API Java client.</description>
   <url>http://detectlanguage.com</url>
   <licenses>
@@ -21,7 +21,7 @@
   </scm>
   <developers>
     <developer>
-      <id>support</id>
+      <id>detectlanguage</id>
       <name>Detect Language</name>
       <email>info@detectlanguage.com</email>
       <organization>DetectLanguage</organization>

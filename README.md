@@ -1,17 +1,8 @@
-# Language Detection API Java client
+# Language Detection API Java Client
 
 Detects language of given text. Returns detected language codes and scores.
 
 [![Build Status](https://secure.travis-ci.org/detectlanguage/detectlanguage-java.png)](http://travis-ci.org/detectlanguage/detectlanguage-java)
-
-## Requirements
-
-- [gson](http://code.google.com/p/google-gson/)
-- [httpclient](http://hc.apache.org/)
-
-Which you can download to `target/dependency` using:
-
-    $ mvn dependency:copy-dependencies
 
 ## Installation
 
@@ -61,6 +52,15 @@ Before using Detect Language API client you have to setup your personal **API ke
     };
     	
     List<List<Result>> results = DetectLanguage.detect(texts);	
+
+## Requirements
+
+- [gson](http://code.google.com/p/google-gson/)
+- [httpclient](http://hc.apache.org/)
+
+Which you can download to `target/dependency` using:
+
+    $ mvn dependency:copy-dependencies
 
 ## Issues
 
