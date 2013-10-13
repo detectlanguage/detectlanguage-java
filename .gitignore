@@ -1,0 +1,27 @@
+# linux
+*~
+
+# java
+*.class
+
+# packages
+*.jar
+*.war
+*.ear
+
+# eclipse
+.settings
+.buildpath
+.classpath
+.project
+
+# logging
+*.log
+
+# maven
+target
+
+
+# idea
+.idea
+*.iml
