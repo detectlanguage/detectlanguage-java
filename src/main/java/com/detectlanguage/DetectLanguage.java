@@ -12,7 +12,7 @@ public abstract class DetectLanguage {
 	public static String apiKey;
 	public static String apiBase = "http://ws.detectlanguage.com/0.2/";
 	public static int timeout = 3 * 1000;
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "1.0.1";
 
 	public static String simpleDetect(final String text) throws APIError {
 		List<Result> results = detect(text);
