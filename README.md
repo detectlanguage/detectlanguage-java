@@ -18,6 +18,18 @@ Add this dependency to your `pom.xml`:
 
 **NOTE**: the `<version>XXX</version>` can be out of date in this README.
 
+### Gradle
+
+Add this dependency to your `build.gradle`:
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		compile group: 'com.detectlanguage', name: 'detectlanguage', version: '1.0.0'
+	}
+
 ## Usage
 
 	import com.detectlanguage.DetectLanguage;
