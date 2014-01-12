@@ -13,7 +13,7 @@ Add this dependency to your `pom.xml`:
     <dependency>
 	    <groupId>com.detectlanguage</groupId>
 	    <artifactId>detectlanguage</artifactId>
-	    <version>1.0.0</version>
+	    <version>1.0.1</version>
     </dependency>
 
 **NOTE**: the `<version>XXX</version>` can be out of date in this README.
@@ -27,7 +27,7 @@ Add this dependency to your `build.gradle`:
 	}
 
 	dependencies {
-		compile group: 'com.detectlanguage', name: 'detectlanguage', version: '1.0.0'
+		compile group: 'com.detectlanguage', name: 'detectlanguage', version: '1.0.1'
 	}
 
 ## Usage
@@ -48,7 +48,7 @@ Before using Detect Language API client you have to setup your personal **API ke
 	Result result = results.get(0);
 	
 	System.out.println("Language: " + result.language);
-	System.out.println("Is reliable: " + result.reliable);
+	System.out.println("Is reliable: " + result.isReliable);
 	System.out.println("Confidence: " + result.confidence);
 	
 	

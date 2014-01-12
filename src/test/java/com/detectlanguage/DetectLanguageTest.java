@@ -1,6 +1,5 @@
 package com.detectlanguage;
 
-import com.detectlanguage.DetectLanguage;
 import com.detectlanguage.errors.APIError;
 
 import static org.junit.Assert.*;
@@ -28,7 +27,7 @@ public class DetectLanguageTest extends BaseTest {
 		Result result = results.get(0);
 
 		assertEquals(result.language, "en");
-		assertFalse(result.reliable);
+		assertTrue(result.isReliable);
 		assertTrue(result.confidence > 0);
 	}
 
@@ -48,13 +47,13 @@ public class DetectLanguageTest extends BaseTest {
 		result = results.get(0).get(0);
 
 		assertEquals(result.language, "en");
-		assertFalse(result.reliable);
+		assertTrue(result.isReliable);
 		assertTrue(result.confidence > 0);
 
 		result = results.get(1).get(0);
 
 		assertEquals(result.language, "lt");
-		assertFalse(result.reliable);
+		assertTrue(result.isReliable);
 		assertTrue(result.confidence > 0);
 	}
 
