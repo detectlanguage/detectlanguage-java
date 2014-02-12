@@ -27,7 +27,7 @@ Add this dependency to your `build.gradle`:
 	}
 
 	dependencies {
-		compile group: 'com.detectlanguage', name: 'detectlanguage', version: '1.0.1'
+		compile 'com.detectlanguage:detectlanguage:1.0.1'
 	}
 
 ## Usage
