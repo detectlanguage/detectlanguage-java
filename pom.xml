@@ -4,7 +4,7 @@
   <artifactId>detectlanguage</artifactId>
   <packaging>jar</packaging>
   <name>detectlanguage-java</name>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <description>Language Detection API Java client.</description>
   <url>http://detectlanguage.com</url>
   <licenses>
