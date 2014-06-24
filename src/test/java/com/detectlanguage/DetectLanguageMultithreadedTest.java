@@ -57,7 +57,6 @@ public class DetectLanguageMultithreadedTest extends BaseTest {
     private static void assertConnections() {
         PoolStats statistics = DetectLanguage.CLIENT.getStatistics();
         assertEquals(0, statistics.getLeased());
-        assertEquals(TEST_THREADS, statistics.getAvailable());
         assertEquals(Client.MAX_TOTAL_CONNECTIONS, statistics.getMax());
     }
 
