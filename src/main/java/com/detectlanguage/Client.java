@@ -6,19 +6,17 @@ import com.detectlanguage.responses.ErrorResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.pool.PoolStats;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -32,27 +30,17 @@ import java.util.Map;
 
 public class Client {
 
-    public static final int MAX_TOTAL_CONNECTIONS = 200;
-    public static final int MAX_CONNECTIONS_PER_ROUTE = 100;
+    public static final String CHARSET = "UTF-8";
 
     private static final String AGENT = "detectlanguage-java";
 
-    private final HttpClient httpClient;
+    private static final RequestConfig requestConfig = RequestConfig
+            .custom()
+            .setSocketTimeout(DetectLanguage.timeout)
+            .setConnectTimeout(DetectLanguage.timeout)
+            .build();
 
     public Client() {
-        PoolingClientConnectionManager connMgr = new PoolingClientConnectionManager();
-        connMgr.setDefaultMaxPerRoute(MAX_CONNECTIONS_PER_ROUTE);
-        connMgr.setMaxTotal(MAX_TOTAL_CONNECTIONS);
-
-        this.httpClient = new DefaultHttpClient(connMgr);
-        this.httpClient.getParams().setParameter("http.protocol.version",
-                HttpVersion.HTTP_1_1);
-        this.httpClient.getParams().setParameter("http.socket.timeout",
-                DetectLanguage.timeout);
-        this.httpClient.getParams().setParameter("http.connection.timeout",
-                DetectLanguage.timeout);
-        this.httpClient.getParams().setParameter(
-                "http.protocol.content-charset", "UTF-8");
     }
 
     public <T> T execute(String method, Map<String, String> params,
@@ -62,40 +50,25 @@ public class Client {
 
         URI uri = buildUri(method);
         HttpPost request = new HttpPost(uri);
+        request.setConfig(requestConfig);
         request.setEntity(buildPostParams(requestParams));
         addHeaders(request);
 
         try {
-            HttpResponse response = httpClient.execute(request);
-            String body = EntityUtils.toString(response.getEntity());
-            return processResponse(responseClass, body);
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+
+            try {
+                HttpResponse response = httpClient.execute(request);
+                String body = EntityUtils.toString(response.getEntity());
+                return processResponse(responseClass, body);
+            } finally {
+                httpClient.close();
+            }
         } catch (ClientProtocolException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            // release of the connection back to the connection manager regardless whether the request execution succeeds or causes an exception
-            request.releaseConnection();
         }
-    }
-
-    /**
-     * When an HttpClient instance is no longer needed and is about to go out of scope it is important to shut down
-     * its connection manager to ensure that all connections kept alive by the manager get closed and system resources
-     * allocated by those connections are released.
-     */
-    public void shutdown() {
-        httpClient.getConnectionManager().shutdown();
-    }
-
-    /**
-     * Method is used for testing.
-     *
-     * @return statistics for current connection pool
-     */
-    PoolStats getStatistics() {
-        PoolStats totalStats = ((PoolingClientConnectionManager) httpClient.getConnectionManager()).getTotalStats();
-        return totalStats;
     }
 
     private <T> T processResponse(Class<T> responseClass, String body)
@@ -136,6 +109,7 @@ public class Client {
         String version = getClass().getPackage().getImplementationVersion();
         request.addHeader(new BasicHeader("User-Agent", AGENT + '/' + version));
         request.addHeader(new BasicHeader("Accept", "application/json"));
+        request.addHeader(new BasicHeader("Accept-Charset", CHARSET));
     }
 
     private String buildQueryString(Map<String, String> params) {
@@ -146,7 +120,7 @@ public class Client {
                     entry.getValue());
             nvs.add(nv);
         }
-        String queryString = URLEncodedUtils.format(nvs, "UTF-8");
+        String queryString = URLEncodedUtils.format(nvs, CHARSET);
         return queryString;
     }
 
@@ -169,7 +143,7 @@ public class Client {
         }
 
         try {
-            return new UrlEncodedFormEntity(parameters, "UTF-8");
+            return new UrlEncodedFormEntity(parameters, CHARSET);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

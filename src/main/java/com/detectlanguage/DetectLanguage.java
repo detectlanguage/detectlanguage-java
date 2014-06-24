@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class DetectLanguage {
-    public static final Client CLIENT = new Client();
-
     public static String apiBase = "http://ws.detectlanguage.com/0.2/";
     public static String apiKey;
     public static int timeout = 3 * 1000;
@@ -28,7 +26,7 @@ public abstract class DetectLanguage {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("q", text);
 
-        DetectResponse response = CLIENT.execute("detect", params,
+        DetectResponse response = getClient().execute("detect", params,
                 DetectResponse.class);
 
         return response.data.detections;
@@ -42,7 +40,7 @@ public abstract class DetectLanguage {
             params.put("q[" + i + "]", texts[i]);
         }
 
-        BatchDetectResponse response = CLIENT.execute("detect", params,
+        BatchDetectResponse response = getClient().execute("detect", params,
                 BatchDetectResponse.class);
 
         return response.data.detections;
@@ -51,9 +49,13 @@ public abstract class DetectLanguage {
     public static StatusResponse getStatus() throws APIError {
         HashMap<String, String> params = new HashMap<String, String>();
 
-        StatusResponse response = CLIENT.execute("user/status", params,
+        StatusResponse response = getClient().execute("user/status", params,
                 StatusResponse.class);
 
         return response;
+    }
+
+    private static Client getClient() {
+        return new Client();
     }
 }

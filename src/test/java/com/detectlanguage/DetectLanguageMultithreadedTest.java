@@ -1,8 +1,9 @@
 package com.detectlanguage;
 
 import com.detectlanguage.errors.APIError;
-import org.apache.http.pool.PoolStats;
 import org.junit.Test;
+
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,20 +14,10 @@ import static org.junit.Assert.assertEquals;
  * Time: 12:41 PM
  */
 public class DetectLanguageMultithreadedTest extends BaseTest {
+    public static final String[] SAMPLES = {"Labas rytas", "Hello world", "Buenos dias"};
+    public static final String[] SAMPLE_CODES = {"lt", "en", "es"};
 
-    public static final String CAPTION = "The PoolingClientConnectionManager will allocate connections based on its " +
-            "configuration. If all connections for a given route have already been leased, a request for a connection" +
-            " will block until a connection is released back to the pool. One can ensure the connection manager does" +
-            " not block indefinitely in the connection request operation by setting 'http.conn-manager.timeout' to a" +
-            " positive value. If the connection request cannot be serviced within the given time period " +
-            "ConnectionPoolTimeoutException will be thrown.";
-
-    public static int TEST_THREADS = 10;
-
-//    @AfterClass
-//    public static void shutdownPoolingManager() {
-//        DetectLanguage.CLIENT.shutdown();
-//    }
+    public static int TEST_THREADS = 20;
 
     @Test
     public void multithreadedRequestExecution() throws InterruptedException {
@@ -48,30 +39,26 @@ public class DetectLanguageMultithreadedTest extends BaseTest {
         }
 
         for (RequestThread thread : threads) {
-            assertEquals("en", thread.detectedLanguage);
+            assertEquals(thread.expectedLanguage, thread.detectedLanguage);
         }
-
-        assertConnections();
-    }
-
-    private static void assertConnections() {
-        PoolStats statistics = DetectLanguage.CLIENT.getStatistics();
-        assertEquals(0, statistics.getLeased());
-        assertEquals(Client.MAX_TOTAL_CONNECTIONS, statistics.getMax());
     }
 
     static class RequestThread extends Thread {
 
         public String detectedLanguage;
+        public String expectedLanguage;
 
         @Override
         public void run() {
             try {
-                detectedLanguage = DetectLanguage.simpleDetect(CAPTION);
+                int n = (new Random()).nextInt(SAMPLES.length);
+                expectedLanguage = SAMPLE_CODES[n];
+                sleep((new Random()).nextInt(10000));
+                detectedLanguage = DetectLanguage.simpleDetect(SAMPLES[n]);
+            } catch (InterruptedException e) {
             } catch (APIError apiError) {
                 apiError.printStackTrace();
             }
         }
-
     }
 }
