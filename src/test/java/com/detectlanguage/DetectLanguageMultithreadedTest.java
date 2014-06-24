@@ -2,8 +2,6 @@ package com.detectlanguage;
 
 import com.detectlanguage.errors.APIError;
 import org.apache.http.pool.PoolStats;
-import org.junit.AfterClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
