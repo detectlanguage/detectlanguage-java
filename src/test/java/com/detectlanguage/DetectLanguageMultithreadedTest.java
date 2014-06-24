@@ -23,17 +23,18 @@ public class DetectLanguageMultithreadedTest extends BaseTest {
             " positive value. If the connection request cannot be serviced within the given time period " +
             "ConnectionPoolTimeoutException will be thrown.";
 
-    @AfterClass
-    public static void shutdownPoolingManager() {
-        DetectLanguage.CLIENT.shutdown();
-    }
+    public static int TEST_THREADS = 10;
 
-    @Ignore("manual run") // test api key allows to execute limited number of requests
+//    @AfterClass
+//    public static void shutdownPoolingManager() {
+//        DetectLanguage.CLIENT.shutdown();
+//    }
+
     @Test
     public void multithreadedRequestExecution() throws InterruptedException {
 
         // create a thread for each request
-        RequestThread[] threads = new RequestThread[Client.MAX_CONNECTIONS_PER_ROUTE];
+        RequestThread[] threads = new RequestThread[TEST_THREADS];
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new RequestThread();
         }
@@ -58,7 +59,7 @@ public class DetectLanguageMultithreadedTest extends BaseTest {
     private static void assertConnections() {
         PoolStats statistics = DetectLanguage.CLIENT.getStatistics();
         assertEquals(0, statistics.getLeased());
-        assertEquals(Client.MAX_CONNECTIONS_PER_ROUTE, statistics.getAvailable());
+        assertEquals(TEST_THREADS, statistics.getAvailable());
         assertEquals(Client.MAX_TOTAL_CONNECTIONS, statistics.getMax());
     }
 
