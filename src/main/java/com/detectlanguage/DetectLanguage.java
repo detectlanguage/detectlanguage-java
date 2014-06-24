@@ -9,10 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class DetectLanguage {
-
-    // There is no need to create many instances of client, because it works via PoolingClientConnectionManager
     public static final Client CLIENT = new Client();
-    public static final String VERSION = "1.0.2";
 
     public static String apiBase = "http://ws.detectlanguage.com/0.2/";
     public static String apiKey;
