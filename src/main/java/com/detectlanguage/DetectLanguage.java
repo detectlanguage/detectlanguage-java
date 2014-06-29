@@ -23,7 +23,7 @@ public abstract class DetectLanguage {
     }
 
     public static List<Result> detect(final String text) throws APIError {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("q", text);
 
         DetectResponse response = getClient().execute("detect", params,
@@ -34,7 +34,7 @@ public abstract class DetectLanguage {
 
     public static List<List<Result>> detect(final String[] texts)
             throws APIError {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
 
         for (int i = 0; i < texts.length; i++) {
             params.put("q[" + i + "]", texts[i]);
@@ -47,7 +47,7 @@ public abstract class DetectLanguage {
     }
 
     public static StatusResponse getStatus() throws APIError {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
 
         StatusResponse response = getClient().execute("user/status", params,
                 StatusResponse.class);

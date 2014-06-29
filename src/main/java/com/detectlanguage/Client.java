@@ -5,28 +5,18 @@ import com.detectlanguage.responses.ErrorData;
 import com.detectlanguage.responses.ErrorResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Client {
 
@@ -34,38 +24,36 @@ public class Client {
 
     private static final String AGENT = "detectlanguage-java";
 
-    private static final RequestConfig requestConfig = RequestConfig
-            .custom()
-            .setSocketTimeout(DetectLanguage.timeout)
-            .setConnectTimeout(DetectLanguage.timeout)
-            .build();
-
     public Client() {
     }
 
-    public <T> T execute(String method, Map<String, String> params,
+    public <T> T execute(String method, Map<String, Object> params,
                          Class<T> responseClass) throws APIError {
-        Map<String, String> requestParams = new HashMap<String, String>(params);
+        Map<String, Object> requestParams = new HashMap<String, Object>(params);
+
         requestParams.put("key", DetectLanguage.apiKey);
 
-        URI uri = buildUri(method);
-        HttpPost request = new HttpPost(uri);
-        request.setConfig(requestConfig);
-        request.setEntity(buildPostParams(requestParams));
-        addHeaders(request);
+        URL url = buildUrl(method);
+        String query = buildQuery(requestParams);
 
         try {
-            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpURLConnection conn = createPostConnection(url, query);
 
             try {
-                HttpResponse response = httpClient.execute(request);
-                String body = EntityUtils.toString(response.getEntity());
+                // trigger the request
+                int rCode = conn.getResponseCode();
+                String body;
+
+                if (rCode >= 200 && rCode < 300) {
+                    body = getResponseBody(conn.getInputStream());
+                } else {
+                    body = getResponseBody(conn.getErrorStream());
+                }
+
                 return processResponse(responseClass, body);
             } finally {
-                httpClient.close();
+                conn.disconnect();
             }
-        } catch (ClientProtocolException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -86,66 +74,121 @@ public class Client {
         return gson.fromJson(body, responseClass);
     }
 
-    private URI buildUri(String path, Map<String, String> params) {
+    private URL buildUrl(String path, Map<String, Object> params) {
         StringBuilder sb = new StringBuilder();
         sb.append(DetectLanguage.apiBase);
         sb.append(path);
         if (params != null && params.size() > 0) {
             sb.append("?");
-            sb.append(buildQueryString(params));
+            sb.append(buildQuery(params));
         }
         try {
-            return new URI(sb.toString());
-        } catch (URISyntaxException e) {
+            return new URL(sb.toString());
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private URI buildUri(String path) {
-        return buildUri(path, null);
+    private URL buildUrl(String path) {
+        return buildUrl(path, null);
     }
 
-    private void addHeaders(HttpUriRequest request) {
-        String version = getClass().getPackage().getImplementationVersion();
-        request.addHeader(new BasicHeader("User-Agent", AGENT + '/' + version));
-        request.addHeader(new BasicHeader("Accept", "application/json"));
-        request.addHeader(new BasicHeader("Accept-Charset", CHARSET));
-    }
+    private HttpURLConnection createPostConnection(
+            URL url, String query) throws IOException {
+        HttpURLConnection conn = createConnection(url);
 
-    private String buildQueryString(Map<String, String> params) {
-        ArrayList<NameValuePair> nvs = new ArrayList<NameValuePair>(
-                params.size());
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            NameValuePair nv = new BasicNameValuePair(entry.getKey(),
-                    entry.getValue());
-            nvs.add(nv);
-        }
-        String queryString = URLEncodedUtils.format(nvs, CHARSET);
-        return queryString;
-    }
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", String.format(
+                "application/x-www-form-urlencoded;charset=%s", CHARSET));
 
-    private UrlEncodedFormEntity buildPostParams(Map<String, String> map) {
-        ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            Object value = entry.getValue();
-            if (value instanceof Collection) {
-                Collection<?> values = (Collection<?>) value;
-                for (Object v : values) {
-                    // This will add a parameter for each value in the
-                    // Collection/List
-                    parameters.add(new BasicNameValuePair(entry.getKey(),
-                            v == null ? null : String.valueOf(v)));
-                }
-            } else {
-                parameters.add(new BasicNameValuePair(entry.getKey(),
-                        value == null ? null : String.valueOf(value)));
+        OutputStream output = null;
+        try {
+            output = conn.getOutputStream();
+            output.write(query.getBytes(CHARSET));
+        } finally {
+            if (output != null) {
+                output.close();
             }
         }
+        return conn;
+    }
 
+    private HttpURLConnection createConnection(URL url) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(DetectLanguage.timeout);
+        conn.setReadTimeout(DetectLanguage.timeout);
+        conn.setUseCaches(false);
+
+        String version = getClass().getPackage().getImplementationVersion();
+
+        conn.setRequestProperty("User-Agent", AGENT + '/' + version);
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Accept-Charset", CHARSET);
+
+        return conn;
+    }
+
+    private static String urlEncode(String str) {
         try {
-            return new UrlEncodedFormEntity(parameters, CHARSET);
+            return URLEncoder.encode(str, CHARSET);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String urlEncodePair(String k, String v) {
+        return String.format("%s=%s", urlEncode(k), urlEncode(v));
+    }
+
+    private static String buildQuery(Map<String, Object> params) {
+        Map<String, String> flatParams = flattenParams(params);
+        StringBuilder queryStringBuffer = new StringBuilder();
+        for (Map.Entry<String, String> entry : flatParams.entrySet()) {
+            if (queryStringBuffer.length() > 0) {
+                queryStringBuffer.append("&");
+            }
+            queryStringBuffer.append(urlEncodePair(entry.getKey(),
+                    entry.getValue()));
+        }
+        return queryStringBuffer.toString();
+    }
+
+    private static Map<String, String> flattenParams(Map<String, Object> params) {
+        if (params == null) {
+            return new HashMap<String, String>();
+        }
+        Map<String, String> flatParams = new HashMap<String, String>();
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (value instanceof Map<?, ?>) {
+                Map<String, Object> flatNestedMap = new HashMap<String, Object>();
+                Map<?, ?> nestedMap = (Map<?, ?>) value;
+                for (Map.Entry<?, ?> nestedEntry : nestedMap.entrySet()) {
+                    flatNestedMap.put(
+                            String.format("%s[%s]", key, nestedEntry.getKey()),
+                            nestedEntry.getValue());
+                }
+                flatParams.putAll(flattenParams(flatNestedMap));
+            } else if (value == null) {
+                flatParams.put(key, "");
+            } else if (value != null) {
+                flatParams.put(key, value.toString());
+            }
+        }
+        return flatParams;
+    }
+
+    private static String getResponseBody(InputStream responseStream)
+            throws IOException {
+        //\A is the beginning of
+        // the stream boundary
+        String rBody = new Scanner(responseStream, CHARSET)
+                .useDelimiter("\\A")
+                .next(); //
+
+        responseStream.close();
+        return rBody;
     }
 }

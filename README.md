@@ -13,7 +13,7 @@ Add this dependency to your `pom.xml`:
     <dependency>
 	    <groupId>com.detectlanguage</groupId>
 	    <artifactId>detectlanguage</artifactId>
-	    <version>1.0.3</version>
+	    <version>1.0.4</version>
     </dependency>
 
 **NOTE**: the `<version>XXX</version>` can be out of date in this README.
@@ -27,7 +27,7 @@ Add this dependency to your `build.gradle`:
 	}
 
 	dependencies {
-		compile 'com.detectlanguage:detectlanguage:1.0.3'
+		compile 'com.detectlanguage:detectlanguage:1.0.4'
 	}
 
 ## Usage
@@ -68,7 +68,6 @@ Before using Detect Language API client you have to setup your personal **API ke
 ## Requirements
 
 - [gson](http://code.google.com/p/google-gson/)
-- [httpclient](http://hc.apache.org/)
 
 Which you can download to `target/dependency` using:
 
