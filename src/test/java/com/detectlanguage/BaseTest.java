@@ -7,8 +7,8 @@ public class BaseTest {
 
     @Before
     public void setUp() {
-        DetectLanguage.apiBase = System.getProperty("detectlanguage_api_base",
-                DetectLanguage.apiBase);
+        DetectLanguage.apiHost = System.getProperty("detectlanguage_api_host",
+                DetectLanguage.apiHost);
         DetectLanguage.apiKey = System.getProperty("detectlanguage_api_key",
                 TEST_API_KEY);
     }

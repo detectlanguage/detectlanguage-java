@@ -10,7 +10,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-public class DetectLanguageTest extends BaseTest {
+public class GenericTest extends BaseTest {
 
     @Test
     public void testSimpleDetect() throws APIError {

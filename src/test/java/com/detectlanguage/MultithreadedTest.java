@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 6/23/2014
  * Time: 12:41 PM
  */
-public class DetectLanguageMultithreadedTest extends BaseTest {
+public class MultithreadedTest extends BaseTest {
     public static final String[] SAMPLES = {"Labas rytas", "Hello world", "Buenos dias"};
     public static final String[] SAMPLE_CODES = {"lt", "en", "es"};
 

@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class DetectLanguage {
-    public static String apiBase = "http://ws.detectlanguage.com/0.2/";
+    public static String apiHost = "ws.detectlanguage.com";
+    public static String apiVersion = "0.2";
     public static String apiKey;
     public static int timeout = 3 * 1000;
+    public static boolean ssl = false;
 
     public static String simpleDetect(final String text) throws APIError {
         List<Result> results = detect(text);

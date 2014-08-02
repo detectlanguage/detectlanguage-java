@@ -5,6 +5,7 @@ import com.detectlanguage.responses.ErrorData;
 import com.detectlanguage.responses.ErrorResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,19 +72,31 @@ public class Client {
             throw new APIError(error.message, error.code);
         }
 
-        return gson.fromJson(body, responseClass);
+        try {
+            return gson.fromJson(body, responseClass);
+        } catch (JsonSyntaxException e) {
+            throw new APIError("Server error. Invalid response format.", 9999);
+        }
+    }
+
+    private String getProtocol() {
+       return DetectLanguage.ssl ? "https" : "http";
     }
 
     private URL buildUrl(String path, Map<String, Object> params) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(DetectLanguage.apiBase);
-        sb.append(path);
-        if (params != null && params.size() > 0) {
-            sb.append("?");
-            sb.append(buildQuery(params));
-        }
+        String url = String.format(
+                "%s://%s/%s/%s",
+                getProtocol(),
+                DetectLanguage.apiHost,
+                DetectLanguage.apiVersion,
+                path);
+
+
+        if (params != null && params.size() > 0)
+            url+= '?' + buildQuery(params);
+
         try {
-            return new URL(sb.toString());
+            return new URL(url);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
