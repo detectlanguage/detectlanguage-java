@@ -17,7 +17,7 @@ public class MultithreadedTest extends BaseTest {
     public static final String[] SAMPLES = {"Labas rytas", "Hello world", "Buenos dias"};
     public static final String[] SAMPLE_CODES = {"lt", "en", "es"};
 
-    public static int TEST_THREADS = 20;
+    public static int TEST_THREADS = 10;
 
     @Test
     public void multithreadedRequestExecution() throws InterruptedException {
