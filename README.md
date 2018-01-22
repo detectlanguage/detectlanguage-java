@@ -13,7 +13,7 @@ Add this dependency to your `pom.xml`:
     <dependency>
 	    <groupId>com.detectlanguage</groupId>
 	    <artifactId>detectlanguage</artifactId>
-	    <version>1.0.5</version>
+	    <version>1.0.6</version>
     </dependency>
 
 **NOTE**: the `<version>XXX</version>` can be out of date in this README.
@@ -27,7 +27,7 @@ Add this dependency to your `build.gradle`:
 	}
 
 	dependencies {
-		compile 'com.detectlanguage:detectlanguage:1.0.5'
+		compile 'com.detectlanguage:detectlanguage:1.0.6'
 	}
 
 ## Usage
