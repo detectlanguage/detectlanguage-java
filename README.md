@@ -38,40 +38,33 @@ Add this dependency to your `build.gradle`:
 
 Before using Detect Language API client you have to setup your personal **API key**. You can get it by signing up at http://detectlanguage.com
 
-	DetectLanguage.apiKey = "YOURAPIKEY";
-	
+    DetectLanguage.apiKey = "YOURAPIKEY";
+
+    // Enable secure mode (SSL) if passing sensitive information
+    // DetectLanguage.ssl = true;
+
 ### Language detection
 
-		
-	List<Result> results = DetectLanguage.detect("Hello world");
-	
-	Result result = results.get(0);
-	
-	System.out.println("Language: " + result.language);
-	System.out.println("Is reliable: " + result.isReliable);
-	System.out.println("Confidence: " + result.confidence);
-	
-	
+    List<Result> results = DetectLanguage.detect("Hello world");
+
+    Result result = results.get(0);
+
+    System.out.println("Language: " + result.language);
+    System.out.println("Is reliable: " + result.isReliable);
+    System.out.println("Confidence: " + result.confidence);
+
 ### Simple detection
 
-	String language = DetectLanguage.simpleDetect("Hello world");
+    String language = DetectLanguage.simpleDetect("Hello world");
 
 ### Batch detection
-	
-	String[] texts = {
-    	"Hello world", 
+
+    String[] texts = {
+    	"Hello world",
     	"Labas rytas"
     };
-    	
-    List<List<Result>> results = DetectLanguage.detect(texts);	
-    
-### SSL (optional)
 
-If you are passing sensitive information to the Detect Language API you can enable SSL.
-
-SSL usage adds data and processing overhead. Please use only if encryption is really necessary.
- 
-    DetectLanguage.ssl = true;
+    List<List<Result>> results = DetectLanguage.detect(texts);
 
 ## Requirements
 
