@@ -30,12 +30,8 @@ public class Client {
 
     public <T> T execute(String method, Map<String, Object> params,
                          Class<T> responseClass) throws APIError {
-        Map<String, Object> requestParams = new HashMap<String, Object>(params);
-
-        requestParams.put("key", DetectLanguage.apiKey);
-
         URL url = buildUrl(method);
-        String query = buildQuery(requestParams);
+        String query = buildQuery(params);
 
         try {
             HttpURLConnection conn = createPostConnection(url, query);
@@ -138,6 +134,7 @@ public class Client {
         conn.setRequestProperty("User-Agent", AGENT + '/' + version);
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("Accept-Charset", CHARSET);
+        conn.setRequestProperty("Authorization", "Bearer " + DetectLanguage.apiKey);
 
         return conn;
     }
