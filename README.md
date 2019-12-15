@@ -88,7 +88,7 @@ List<List<Result>> results = DetectLanguage.detect(texts);
 
 Which you can download to `target/dependency` using:
 
-    $ mvn dependency:copy-dependencies
+    mvn dependency:copy-dependencies
 
 ## Issues
 
