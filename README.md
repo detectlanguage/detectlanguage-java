@@ -12,11 +12,13 @@ Detects language of given text. Returns detected language codes and scores.
 
 Add this dependency to your `pom.xml`:
 
-    <dependency>
-	    <groupId>com.detectlanguage</groupId>
-	    <artifactId>detectlanguage</artifactId>
-	    <version>1.1.0</version>
-    </dependency>
+```xml
+<dependency>
+    <groupId>com.detectlanguage</groupId>
+    <artifactId>detectlanguage</artifactId>
+    <version>1.1.0</version>
+</dependency>
+```
 
 **NOTE**: the `<version>XXX</version>` can be out of date in this README.
 
@@ -24,49 +26,61 @@ Add this dependency to your `pom.xml`:
 
 Add this dependency to your `build.gradle`:
 
-	repositories {
-		mavenCentral()
-	}
+```gradle
+repositories {
+	mavenCentral()
+}
 
-	dependencies {
-		compile 'com.detectlanguage:detectlanguage:1.1.0'
-	}
+dependencies {
+	compile 'com.detectlanguage:detectlanguage:1.1.0'
+}
+```
 
 ## Usage
 
-	import com.detectlanguage.DetectLanguage;
+```java
+import com.detectlanguage.DetectLanguage;
+```
 
 ### Configuration
 
 Before using Detect Language API client you have to setup your personal **API key**. You can get it by signing up at http://detectlanguage.com
 
-    DetectLanguage.apiKey = "YOURAPIKEY";
+```java
+DetectLanguage.apiKey = "YOURAPIKEY";
 
-    // Enable secure mode (SSL) if passing sensitive information
-    // DetectLanguage.ssl = true;
+// Enable secure mode (SSL) if passing sensitive information
+// DetectLanguage.ssl = true;
+```
 
 ### Language detection
 
-    List<Result> results = DetectLanguage.detect("Hello world");
+```java
+List<Result> results = DetectLanguage.detect("Hello world");
 
-    Result result = results.get(0);
+Result result = results.get(0);
 
-    System.out.println("Language: " + result.language);
-    System.out.println("Is reliable: " + result.isReliable);
-    System.out.println("Confidence: " + result.confidence);
+System.out.println("Language: " + result.language);
+System.out.println("Is reliable: " + result.isReliable);
+System.out.println("Confidence: " + result.confidence);
+```
 
 ### Simple detection
 
-    String language = DetectLanguage.simpleDetect("Hello world");
+```java
+String language = DetectLanguage.simpleDetect("Hello world");
+```
 
 ### Batch detection
 
-    String[] texts = {
-    	"Hello world",
-    	"Labas rytas"
-    };
+```java
+String[] texts = {
+	"Hello world",
+	"Labas rytas"
+};
 
-    List<List<Result>> results = DetectLanguage.detect(texts);
+List<List<Result>> results = DetectLanguage.detect(texts);
+```
 
 ## Requirements
 
@@ -82,7 +96,7 @@ Please use appropriately tagged github [issues](https://github.com/detectlanguag
 
 ## Testing
 
-    $ mvn test
+    mvn test
 
 ## Publishing
 
@@ -90,13 +104,13 @@ Please use appropriately tagged github [issues](https://github.com/detectlanguag
 
 ### Snapshot
 
-    $ mvn clean deploy
+    mvn clean deploy
 
 ### Stage Release
 
-    $ mvn release:clean
-    $ mvn release:prepare
-    $ mvn release:perform
+    mvn release:clean
+    mvn release:prepare
+    mvn release:perform
 
 ### Release
 
