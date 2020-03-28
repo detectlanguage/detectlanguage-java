@@ -20,8 +20,6 @@ Add this dependency to your `pom.xml`:
 </dependency>
 ```
 
-**NOTE**: the `<version>XXX</version>` can be out of date in this README.
-
 ### Gradle
 
 Add this dependency to your `build.gradle`:
