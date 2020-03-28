@@ -42,7 +42,7 @@ import com.detectlanguage.DetectLanguage;
 
 ### Configuration
 
-Before using Detect Language API client you have to setup your personal **API key**. You can get it by signing up at http://detectlanguage.com
+Before using Detect Language API client you have to setup your personal **API key**. You can get it by signing up at https://detectlanguage.com
 
 ```java
 DetectLanguage.apiKey = "YOURAPIKEY";
