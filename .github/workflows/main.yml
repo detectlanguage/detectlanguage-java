@@ -3,13 +3,32 @@ on: [push,pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 10, 11 ]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: ${{ matrix.java-version }}
           distribution: 'adopt'
+      - name: Build with Maven
+        env:
+          DETECTLANGUAGE_API_KEY: ${{ secrets.DETECTLANGUAGE_API_KEY }}
+        run: mvn test
+
+  build-oracle:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: oracle-actions/setup-java@v1
+        with:
+          release: ${{ matrix.java-version }}
       - name: Build with Maven
         env:
           DETECTLANGUAGE_API_KEY: ${{ secrets.DETECTLANGUAGE_API_KEY }}
