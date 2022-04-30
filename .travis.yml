@@ -1,8 +1,0 @@
-language: java
-jdk:
-- openjdk10
-- openjdk11
-- oraclejdk11
-env:
-  global:
-    secure: e4cygn0CyireHS0faQf+h1mv6Iaq+Orm5fKVFBPj8wvkeIwuo8C6S2rw3tsDGDckHDaFbstjV+99IhgkXsgCd50HEu3BffOclVkWa7mNspodQ9ao43nfJtGS2dbe45uPepZfJ/cCcVvN7UdS3SL+3ErEMEYbu1GcFwiRfqN+VvE=
