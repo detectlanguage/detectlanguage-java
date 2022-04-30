@@ -13,6 +13,7 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'adopt'
+          cache: 'maven'
       - name: Build with Maven
         env:
           DETECTLANGUAGE_API_KEY: ${{ secrets.DETECTLANGUAGE_API_KEY }}
