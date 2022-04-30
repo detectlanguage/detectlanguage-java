@@ -22,13 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [ 11 ]
+        java-release: [ 17 ]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK ${{ matrix.java-version }}
+      - name: Set up JDK ${{ matrix.java-release }}
         uses: oracle-actions/setup-java@v1
         with:
-          release: ${{ matrix.java-version }}
+          release: ${{ matrix.java-release }}
       - name: Build with Maven
         env:
           DETECTLANGUAGE_API_KEY: ${{ secrets.DETECTLANGUAGE_API_KEY }}
