@@ -1,11 +1,11 @@
 name: Build & Test
 on: [push,pull_request]
 jobs:
-  build:
+  build-openjdk:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [ 10, 11 ]
+        java-version: [ 11, 17 ]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK ${{ matrix.java-version }}
@@ -18,11 +18,11 @@ jobs:
           DETECTLANGUAGE_API_KEY: ${{ secrets.DETECTLANGUAGE_API_KEY }}
         run: mvn test
 
-  build-oracle:
+  build-oraclejdk:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 11 ]
+        java-version: [ 11 ]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK ${{ matrix.java-version }}
