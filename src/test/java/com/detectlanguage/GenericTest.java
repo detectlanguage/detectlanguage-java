@@ -14,7 +14,7 @@ public class GenericTest extends BaseTest {
 
     @Test
     public void testSimpleDetect() throws APIError {
-        String language = DetectLanguage.simpleDetect("Hello world");
+        String language = DetectLanguage.simpleDetect("API tests");
 
         assertEquals(language, "en");
     }
