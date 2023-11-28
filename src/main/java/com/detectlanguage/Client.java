@@ -25,7 +25,8 @@ public class Client {
 
     private static final String AGENT = "detectlanguage-java";
 
-    public Client() {
+    public Client() {DetectLanguage.apiKey = "211b1c07ce6854eb6108137486393ca8";
+
     }
 
     public <T> T execute(String method, Map<String, Object> params,

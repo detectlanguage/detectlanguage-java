@@ -17,6 +17,13 @@ public class GenericTest extends BaseTest {
         String language = DetectLanguage.simpleDetect("Hello world");
 
         assertEquals(language, "en");
+        List<Result> results = DetectLanguage.detect("Hello world");
+
+        Result result = results.get(0);
+
+        System.out.println("Language: " + result.language);
+        System.out.println("Is reliable: " + result.isReliable);
+        System.out.println("Confidence: " + result.confidence);
     }
 
     @Test
