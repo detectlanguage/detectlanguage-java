@@ -1,0 +1,13 @@
+Testcase 1: Authentication to Github using username and password.
+Testcase 2: Creating a repository and providing a name.
+Testcase3: Cloning the code using the HTTP link provided and executing it in the Github command to connect to the project . Expected: Code that needs to be cloned is updated in the project.
+Testcase 4: Generating API key by logging in to the Git server. API key is copied and pasted in the required code(classes.io) and executed. Expected: User must login inorder to check the API key.
+Testcase 5: Install and add all the prerequisites needed to set up test framework and test environment in Java.(Maven/Gradle)
+Testcase 6: Install GitBash and execute the commands needed to be setup ($Git- Init, registering username and email ID: $ git config --global user.name/$ git config --global email.ID
+Testcase 7: Execute the required code and check for pass/fail. Once verified, code is committed and pushed to the github server. Expected: Successful push to the account, if error then check for the SSH key and repush.
+Testcase 8: Create pull request in Github and execute the cases using Action command. Expected: Test case passed/ Test case failed( Recheck and raise issue in Git)
+TEST STRATEGY:
+Pre- installation of programming tools and the needed test environment.(Java required tools- Intellij, GitBash command, Command prompt)
+Authentication to Github without any error. If using token, it is generated once, inorder to use another token change the name of the authentication to create new token.
+RISK FACTORS: Pushing the code from Java to GitHub without errors, if error occurs, check the necessary methods by regenerating tokens to overcome the error.
+Executing the code and getting passed/failed commands. If failed, code to be rechecked and re-executed, if same error occurs issue to be created in Git and tracked.
