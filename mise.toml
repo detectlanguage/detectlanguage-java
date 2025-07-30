@@ -1,0 +1,5 @@
+[tools]
+java = "openjdk-21"
+
+[env]
+_.file = ".env.local"

@@ -1,8 +1,11 @@
 # linux
 *~
 
+.env.local
+
 # java
 *.class
+.gradle
 
 # packages
 *.jar
