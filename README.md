@@ -46,9 +46,6 @@ Before using Detect Language API client you have to setup your personal **API ke
 
 ```java
 DetectLanguage.apiKey = "YOURAPIKEY";
-
-// Enable secure mode (SSL) if passing sensitive information
-// DetectLanguage.ssl = true;
 ```
 
 ### Language detection
@@ -59,8 +56,7 @@ List<Result> results = DetectLanguage.detect("Hello world");
 Result result = results.get(0);
 
 System.out.println("Language: " + result.language);
-System.out.println("Is reliable: " + result.isReliable);
-System.out.println("Confidence: " + result.confidence);
+System.out.println("Score: " + result.score);
 ```
 
 ### Simple detection
@@ -113,13 +109,3 @@ Please use appropriately tagged github [issues](https://github.com/detectlanguag
 ### Release
 
 Done using the [Sonatype Nexus UI](https://oss.sonatype.org/).
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Write your code **and tests**
-4. Ensure all [tests](#testing) still pass
-5. Commit your changes (`git commit -am 'Add some feature'`)
-6. Push to the branch (`git push origin my-new-feature`)
-7. Create new pull request
