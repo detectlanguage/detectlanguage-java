@@ -15,8 +15,8 @@ import static org.junit.Assert.assertEquals;
  * Time: 12:41 PM
  */
 public class MultithreadedTest extends BaseTest {
-    public static final String[] SAMPLES = {"Labas rytas", "Hello world", "Buenos dias"};
-    public static final String[] SAMPLE_CODES = {"lt", "en", "es"};
+    public static final String[] SAMPLES = {"Labas rytas", "Hello world", "Dolce far niente"};
+    public static final String[] SAMPLE_CODES = {"lt", "en", "it"};
 
     public static int TEST_THREADS = 10;
 

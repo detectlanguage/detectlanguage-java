@@ -53,6 +53,12 @@ public abstract class DetectLanguage {
         return getClient().get("account/status", StatusResponse.class);
     }
 
+    public static List<LanguageInfo> getLanguages() throws APIError {
+        Type resultType = new TypeToken<List<LanguageInfo>>(){}.getType();
+
+        return getClient().get("languages", resultType);
+    }
+
     private static Client getClient() {
         return new Client();
     }

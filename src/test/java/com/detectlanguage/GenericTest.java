@@ -82,4 +82,13 @@ public class GenericTest extends BaseTest {
         DetectLanguage.apiKey = "INVALID";
         DetectLanguage.getStatus();
     }
+
+    @Test
+    public void testGetLanguages() throws APIError {
+        List<LanguageInfo> languages = DetectLanguage.getLanguages();
+
+        assertTrue(languages.size() > 0);
+        assertTrue(languages.get(0).code.length() > 0);
+        assertTrue(languages.get(0).name.length() > 0);
+    }
 }
