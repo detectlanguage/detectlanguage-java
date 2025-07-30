@@ -26,8 +26,7 @@ public class GenericTest extends BaseTest {
         Result result = results.get(0);
 
         assertEquals(result.language, "en");
-        assertTrue(result.isReliable);
-        assertTrue(result.confidence > 0);
+        assertTrue(result.score > 0);
     }
 
     @Test(expected = APIError.class)
@@ -46,14 +45,12 @@ public class GenericTest extends BaseTest {
         result = results.get(0).get(0);
 
         assertEquals(result.language, "en");
-        assertTrue(result.isReliable);
-        assertTrue(result.confidence > 0);
+        assertTrue(result.score > 0);
 
         result = results.get(1).get(0);
 
         assertEquals(result.language, "lt");
-        assertTrue(result.isReliable);
-        assertTrue(result.confidence > 0);
+        assertTrue(result.score > 0);
     }
 
     @Test(expected = APIError.class)
