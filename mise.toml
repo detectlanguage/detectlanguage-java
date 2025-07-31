@@ -4,3 +4,6 @@ maven = "3"
 
 [env]
 _.file = ".env.local"
+
+[tasks]
+test = "mvn test"
