@@ -1,7 +1,7 @@
 package com.detectlanguage;
 
 import com.detectlanguage.errors.APIError;
-import com.detectlanguage.responses.StatusResponse;
+import com.detectlanguage.responses.AccountStatusResponse;
 import org.junit.Test;
 
 import java.util.Date;
@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class DetectLanguageTest extends BaseTest {
 
     @Test
-    public void testSimpleDetect() throws APIError {
-        String language = DetectLanguage.simpleDetect("Hello world");
+    public void testDetectCode() throws APIError {
+        String language = DetectLanguage.detectCode("Hello world");
 
         assertEquals(language, "en");
     }
@@ -63,8 +63,8 @@ public class DetectLanguageTest extends BaseTest {
     }
 
     @Test
-    public void testGetStatus() throws APIError {
-        StatusResponse statusResponse = DetectLanguage.getStatus();
+    public void testGetAccountStatus() throws APIError {
+        AccountStatusResponse statusResponse = DetectLanguage.getAccountStatus();
 
         assertThat(statusResponse.getDate(), is(instanceOf(Date.class)));
         assertTrue(statusResponse.getRequests() >= 0);
@@ -80,7 +80,7 @@ public class DetectLanguageTest extends BaseTest {
     @Test(expected = APIError.class)
     public void testStatusError() throws APIError {
         DetectLanguage.apiKey = "INVALID";
-        DetectLanguage.getStatus();
+        DetectLanguage.getAccountStatus();
     }
 
     @Test

@@ -21,7 +21,7 @@ public class ServerErrorTest extends BaseTest {
 
     @Ignore
     @Test(expected = APIError.class)
-    public void testSimpleDetect() throws APIError {
-        DetectLanguage.simpleDetect("Hello world");
+    public void testDetectCode() throws APIError {
+        DetectLanguage.detectCode("Hello world");
     }
 }

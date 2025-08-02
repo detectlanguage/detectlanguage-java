@@ -1,7 +1,7 @@
 package com.detectlanguage;
 
 import com.detectlanguage.errors.APIError;
-import com.detectlanguage.responses.StatusResponse;
+import com.detectlanguage.responses.AccountStatusResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ public abstract class DetectLanguage {
     public static String apiKey;
     public static int timeout = 3 * 1000;
 
-    public static String simpleDetect(final String text) throws APIError {
+    public static String detectCode(final String text) throws APIError {
         List<Result> results = detect(text);
 
         if (results.isEmpty())
@@ -49,8 +49,8 @@ public abstract class DetectLanguage {
         return getClient().post("detect-batch", payload, resultType);
     }
 
-    public static StatusResponse getStatus() throws APIError {
-        return getClient().get("account/status", StatusResponse.class);
+    public static AccountStatusResponse getAccountStatus() throws APIError {
+        return getClient().get("account/status", AccountStatusResponse.class);
     }
 
     public static List<LanguageInfo> getLanguages() throws APIError {

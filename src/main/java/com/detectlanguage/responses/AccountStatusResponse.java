@@ -2,7 +2,7 @@ package com.detectlanguage.responses;
 
 import java.util.Date;
 
-public class StatusResponse extends Response {
+public class AccountStatusResponse extends Response {
     private Date date;
     private Double requests;
     private Double bytes;

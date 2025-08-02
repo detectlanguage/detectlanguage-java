@@ -56,7 +56,7 @@ public class MultithreadedTest extends BaseTest {
                 int n = (new Random()).nextInt(SAMPLES.length);
                 expectedLanguage = SAMPLE_CODES[n];
                 sleep((new Random()).nextInt(10000));
-                detectedLanguage = DetectLanguage.simpleDetect(SAMPLES[n]);
+                detectedLanguage = DetectLanguage.detectCode(SAMPLES[n]);
             } catch (InterruptedException e) {
             } catch (APIError apiError) {
                 apiError.printStackTrace();
