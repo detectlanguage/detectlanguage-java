@@ -1,3 +1,4 @@
+# https://medium.com/@jtbsorensen/publish-your-artifact-to-the-maven-central-repository-using-github-actions-15d3b5d9ce88
 name: Publish package to the Maven Central Repository
 on:
   release:
