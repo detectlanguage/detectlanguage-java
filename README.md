@@ -1,6 +1,6 @@
 # Detect Language API Java Client
 
-[![Maven metadata URI](https://img.shields.io/maven-central/v/com.detectlanguage/detectlanguage)](https://mvnrepository.com/artifact/com.detectlanguage/detectlanguage)
+[![Maven metadata URI](https://img.shields.io/maven-central/v/com.detectlanguage/detectlanguage)](https://central.sonatype.com/artifact/com.detectlanguage/detectlanguage)
 [![Build Status](https://github.com/detectlanguage/detectlanguage-java/actions/workflows/main.yml/badge.svg)](https://github.com/detectlanguage/detectlanguage-java/actions)
 
 Detects language of the given text. Returns detected language codes and scores.
