@@ -1,21 +1,21 @@
 package com.detectlanguage;
 
 import com.detectlanguage.errors.APIError;
-import com.detectlanguage.responses.BatchDetectResponse;
-import com.detectlanguage.responses.DetectResponse;
-import com.detectlanguage.responses.StatusResponse;
+import com.detectlanguage.responses.AccountStatusResponse;
 
 import java.util.HashMap;
 import java.util.List;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
 
 public abstract class DetectLanguage {
     public static String apiHost = "ws.detectlanguage.com";
-    public static String apiVersion = "0.2";
+    public static String apiVersion = "v3";
     public static String apiKey;
     public static int timeout = 3 * 1000;
-    public static boolean ssl = false;
 
-    public static String simpleDetect(final String text) throws APIError {
+    public static String detectCode(final String text) throws APIError {
         List<Result> results = detect(text);
 
         if (results.isEmpty())
@@ -25,36 +25,38 @@ public abstract class DetectLanguage {
     }
 
     public static List<Result> detect(final String text) throws APIError {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("q", text);
+        HashMap<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("q", text);
 
-        DetectResponse response = getClient().execute("detect", params,
-                DetectResponse.class);
+        Gson gson = new Gson();
+        String payload = gson.toJson(jsonMap);
 
-        return response.data.detections;
+        Type resultType = new TypeToken<List<Result>>(){}.getType();
+
+        return getClient().post("detect", payload, resultType);
     }
 
     public static List<List<Result>> detect(final String[] texts)
             throws APIError {
-        HashMap<String, Object> params = new HashMap<String, Object>();
+        HashMap<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("q", texts);
 
-        for (int i = 0; i < texts.length; i++) {
-            params.put("q[" + i + "]", texts[i]);
-        }
+        Gson gson = new Gson();
+        String payload = gson.toJson(jsonMap);
 
-        BatchDetectResponse response = getClient().execute("detect", params,
-                BatchDetectResponse.class);
+        Type resultType = new TypeToken<List<List<Result>>>(){}.getType();
 
-        return response.data.detections;
+        return getClient().post("detect-batch", payload, resultType);
     }
 
-    public static StatusResponse getStatus() throws APIError {
-        HashMap<String, Object> params = new HashMap<String, Object>();
+    public static AccountStatusResponse getAccountStatus() throws APIError {
+        return getClient().get("account/status", AccountStatusResponse.class);
+    }
 
-        StatusResponse response = getClient().execute("user/status", params,
-                StatusResponse.class);
+    public static List<LanguageInfo> getLanguages() throws APIError {
+        Type resultType = new TypeToken<List<LanguageInfo>>(){}.getType();
 
-        return response;
+        return getClient().get("languages", resultType);
     }
 
     private static Client getClient() {

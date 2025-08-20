@@ -1,7 +1,7 @@
 package com.detectlanguage;
 
 import com.detectlanguage.errors.APIError;
-import com.detectlanguage.responses.StatusResponse;
+import com.detectlanguage.responses.AccountStatusResponse;
 import org.junit.Test;
 
 import java.util.Date;
@@ -10,11 +10,11 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-public class GenericTest extends BaseTest {
+public class DetectLanguageTest extends BaseTest {
 
     @Test
-    public void testSimpleDetect() throws APIError {
-        String language = DetectLanguage.simpleDetect("Hello world");
+    public void testDetectCode() throws APIError {
+        String language = DetectLanguage.detectCode("Hello world");
 
         assertEquals(language, "en");
     }
@@ -26,8 +26,7 @@ public class GenericTest extends BaseTest {
         Result result = results.get(0);
 
         assertEquals(result.language, "en");
-        assertTrue(result.isReliable);
-        assertTrue(result.confidence > 0);
+        assertTrue(result.score > 0);
     }
 
     @Test(expected = APIError.class)
@@ -46,14 +45,12 @@ public class GenericTest extends BaseTest {
         result = results.get(0).get(0);
 
         assertEquals(result.language, "en");
-        assertTrue(result.isReliable);
-        assertTrue(result.confidence > 0);
+        assertTrue(result.score > 0);
 
         result = results.get(1).get(0);
 
         assertEquals(result.language, "lt");
-        assertTrue(result.isReliable);
-        assertTrue(result.confidence > 0);
+        assertTrue(result.score > 0);
     }
 
     @Test(expected = APIError.class)
@@ -66,8 +63,8 @@ public class GenericTest extends BaseTest {
     }
 
     @Test
-    public void testGetStatus() throws APIError {
-        StatusResponse statusResponse = DetectLanguage.getStatus();
+    public void testGetAccountStatus() throws APIError {
+        AccountStatusResponse statusResponse = DetectLanguage.getAccountStatus();
 
         assertThat(statusResponse.getDate(), is(instanceOf(Date.class)));
         assertTrue(statusResponse.getRequests() >= 0);
@@ -83,6 +80,15 @@ public class GenericTest extends BaseTest {
     @Test(expected = APIError.class)
     public void testStatusError() throws APIError {
         DetectLanguage.apiKey = "INVALID";
-        DetectLanguage.getStatus();
+        DetectLanguage.getAccountStatus();
+    }
+
+    @Test
+    public void testGetLanguages() throws APIError {
+        List<LanguageInfo> languages = DetectLanguage.getLanguages();
+
+        assertTrue(languages.size() > 0);
+        assertTrue(languages.get(0).code.length() > 0);
+        assertTrue(languages.get(0).name.length() > 0);
     }
 }

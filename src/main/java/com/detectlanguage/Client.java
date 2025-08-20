@@ -18,23 +18,45 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.lang.reflect.Type;
 
 public class Client {
-
-    public static final String CHARSET = "UTF-8";
-
     private static final String AGENT = "detectlanguage-java";
+    private static final String CHARSET = "UTF-8";
 
     public Client() {
     }
 
-    public <T> T execute(String method, Map<String, Object> params,
-                         Class<T> responseClass) throws APIError {
-        URL url = buildUrl(method);
-        String query = buildQuery(params);
+    public <T> T get(String path, Type responseType) throws APIError {
+        return execute("GET", path, null, null, responseType);
+    }
+
+    public <T> T post(String path, String payload, Type responseType) throws APIError {
+        return execute("POST", path, null, payload, responseType);
+    }
+
+    private <T> T execute(String method, String path, Map<String, Object> params,
+    String payload, Type responseType) throws APIError {
+        URL url = buildUrl(path, params);
 
         try {
-            HttpURLConnection conn = createPostConnection(url, query);
+            HttpURLConnection conn = createConnection(url);
+
+            conn.setDoOutput(true);
+            conn.setRequestMethod(method);
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            if (payload != null) {
+                OutputStream output = null;
+                try {
+                    output = conn.getOutputStream();
+                    output.write(payload.getBytes(CHARSET));
+                } finally {
+                    if (output != null) {
+                        output.close();
+                    }
+                }
+            }
 
             try {
                 // trigger the request
@@ -47,7 +69,7 @@ public class Client {
                     body = getResponseBody(conn.getErrorStream());
                 }
 
-                return processResponse(responseClass, body);
+                return processResponse(responseType, body);
             } finally {
                 conn.disconnect();
             }
@@ -56,7 +78,7 @@ public class Client {
         }
     }
 
-    private <T> T processResponse(Class<T> responseClass, String body)
+    private <T> T processResponse(Type responseType, String body)
             throws APIError {
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -69,20 +91,15 @@ public class Client {
         }
 
         try {
-            return gson.fromJson(body, responseClass);
+            return gson.fromJson(body, responseType);
         } catch (JsonSyntaxException e) {
             throw new APIError("Server error. Invalid response format.", 9999);
         }
     }
 
-    private String getProtocol() {
-       return DetectLanguage.ssl ? "https" : "http";
-    }
-
     private URL buildUrl(String path, Map<String, Object> params) {
         String url = String.format(
-                "%s://%s/%s/%s",
-                getProtocol(),
+                "https://%s/%s/%s",
                 DetectLanguage.apiHost,
                 DetectLanguage.apiVersion,
                 path);
@@ -98,31 +115,6 @@ public class Client {
         }
     }
 
-    private URL buildUrl(String path) {
-        return buildUrl(path, null);
-    }
-
-    private HttpURLConnection createPostConnection(
-            URL url, String query) throws IOException {
-        HttpURLConnection conn = createConnection(url);
-
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", String.format(
-                "application/x-www-form-urlencoded;charset=%s", CHARSET));
-
-        OutputStream output = null;
-        try {
-            output = conn.getOutputStream();
-            output.write(query.getBytes(CHARSET));
-        } finally {
-            if (output != null) {
-                output.close();
-            }
-        }
-        return conn;
-    }
-
     private HttpURLConnection createConnection(URL url) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setConnectTimeout(DetectLanguage.timeout);
@@ -133,7 +125,6 @@ public class Client {
 
         conn.setRequestProperty("User-Agent", AGENT + '/' + version);
         conn.setRequestProperty("Accept", "application/json");
-        conn.setRequestProperty("Accept-Charset", CHARSET);
         conn.setRequestProperty("Authorization", "Bearer " + DetectLanguage.apiKey);
 
         return conn;
