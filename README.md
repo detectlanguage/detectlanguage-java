@@ -103,25 +103,3 @@ Which you can download to `target/dependency` using:
 ## Issues
 
 Please use appropriately tagged github [issues](https://github.com/detectlanguage/detectlanguage-java/issues) to request features or report bugs.
-
-## Testing
-
-    mvn test
-
-## Publishing
-
-[Sonatype OSS repository](https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide).
-
-### Snapshot
-
-    mvn clean deploy
-
-### Stage Release
-
-    mvn release:clean
-    mvn release:prepare
-    mvn release:perform
-
-### Release
-
-Done using the [Sonatype Nexus UI](https://oss.sonatype.org/).
