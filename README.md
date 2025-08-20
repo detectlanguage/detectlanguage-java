@@ -16,7 +16,7 @@ Add this dependency to your `pom.xml`:
 <dependency>
     <groupId>com.detectlanguage</groupId>
     <artifactId>detectlanguage</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.detectlanguage:detectlanguage:2.0.0'
+	compile 'com.detectlanguage:detectlanguage:2.0.1'
 }
 ```
 
