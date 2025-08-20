@@ -17,7 +17,7 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:detectlanguage/detectlanguage-java.git</url>
+        <url>https://github.com/detectlanguage/detectlanguage-java</url>
         <connection>scm:git:git@github.com:detectlanguage/detectlanguage-java.git</connection>
         <developerConnection>scm:git:git@github.com:detectlanguage/detectlanguage-java.git</developerConnection>
     </scm>
