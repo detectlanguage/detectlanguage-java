@@ -92,14 +92,6 @@ AccountStatusResponse accountStatus = DetectLanguage.getAccountStatus();
 LanguageInfo[] languages = DetectLanguage.getLanguages();
 ```
 
-## Requirements
+## License
 
-- [gson](http://code.google.com/p/google-gson/)
-
-Which you can download to `target/dependency` using:
-
-    mvn dependency:copy-dependencies
-
-## Issues
-
-Please use appropriately tagged github [issues](https://github.com/detectlanguage/detectlanguage-java/issues) to request features or report bugs.
+Detect Language API Java Client is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
