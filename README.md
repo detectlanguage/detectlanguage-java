@@ -34,6 +34,10 @@ dependencies {
 }
 ```
 
+### Upgrading
+
+When upgrading please check [changelog](CHANGELOG.md) for breaking changes.
+
 ## Usage
 
 ```java
