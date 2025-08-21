@@ -17,11 +17,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Scanner;
 import java.lang.reflect.Type;
 
 public class Client {
-    private static final String AGENT = "detectlanguage-java";
+    private static final String AGENT = "detectlanguage-java/" + getVersionFromProperties();
     private static final String CHARSET = "UTF-8";
 
     public Client() {
@@ -36,7 +37,7 @@ public class Client {
     }
 
     private <T> T execute(String method, String path, Map<String, Object> params,
-    String payload, Type responseType) throws APIError {
+            String payload, Type responseType) throws APIError {
         URL url = buildUrl(path, params);
 
         try {
@@ -104,9 +105,8 @@ public class Client {
                 DetectLanguage.apiVersion,
                 path);
 
-
         if (params != null && params.size() > 0)
-            url+= '?' + buildQuery(params);
+            url += '?' + buildQuery(params);
 
         try {
             return new URL(url);
@@ -121,9 +121,7 @@ public class Client {
         conn.setReadTimeout(DetectLanguage.timeout);
         conn.setUseCaches(false);
 
-        String version = getClass().getPackage().getImplementationVersion();
-
-        conn.setRequestProperty("User-Agent", AGENT + '/' + version);
+        conn.setRequestProperty("User-Agent", AGENT);
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("Authorization", "Bearer " + DetectLanguage.apiKey);
 
@@ -183,7 +181,7 @@ public class Client {
 
     private static String getResponseBody(InputStream responseStream)
             throws IOException {
-        //\A is the beginning of
+        // \A is the beginning of
         // the stream boundary
         String rBody = new Scanner(responseStream, CHARSET)
                 .useDelimiter("\\A")
@@ -191,5 +189,20 @@ public class Client {
 
         responseStream.close();
         return rBody;
+    }
+
+    private static String getVersionFromProperties() {
+        try {
+            Properties props = new Properties();
+            InputStream input = Client.class.getClassLoader().getResourceAsStream("version.properties");
+            if (input != null) {
+                props.load(input);
+                input.close();
+                return props.getProperty("version", "unknown");
+            }
+        } catch (IOException e) {
+            // Fallback to unknown version
+        }
+        return "unknown";
     }
 }

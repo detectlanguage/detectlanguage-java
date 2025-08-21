@@ -37,7 +37,7 @@ public class DetectLanguageTest extends BaseTest {
 
     @Test
     public void testBatchDetect() throws APIError {
-        String[] texts = {"Hello world", "Kabo kabikas, žiūri žiūrikas"};
+        String[] texts = { "Hello world", "Kabo kabikas, žiūri žiūrikas" };
 
         List<List<Result>> results = DetectLanguage.detect(texts);
         Result result;
@@ -57,7 +57,7 @@ public class DetectLanguageTest extends BaseTest {
     public void testBatchDetectError() throws APIError {
         DetectLanguage.apiKey = "INVALID";
 
-        String[] texts = {"Hello world", "Kabo kabikas, žiūri žiūrikas"};
+        String[] texts = { "Hello world", "Kabo kabikas, žiūri žiūrikas" };
 
         DetectLanguage.detect(texts);
     }
